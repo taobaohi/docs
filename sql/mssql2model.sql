@@ -25,7 +25,7 @@ from
     select 
         replace(col.name, ' ', '_') ColumnName,
         column_id ColumnId,
-        ext.value as column_description,
+        isnull(ext.value,'') as column_description,
         case typ.name 
             when 'bigint' then 'long'
             when 'binary' then 'byte[]'
