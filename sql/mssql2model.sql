@@ -1,10 +1,23 @@
 -- Creating C# model class from SQL query
--- https://habilisbest.com/creating-c-model-class-from-sql-query
-declare @TableName sysname = 'TABLE_NAME'
-declare @Result varchar(max) = 'public class ' + @TableName + '
+-- https://community.dynamics.com/365/b/livingintechnology/archive/2019/06/05/sql-script-to-generate-c-model
+
+declare @TableName sysname = 'User'
+
+-- table  MS_Description
+declare @TableDescription sql_variant
+SELECT @TableDescription=ds.value FROM sys.extended_properties ds  LEFT JOIN sysobjects tbs ON ds.major_id=tbs.id  WHERE  ds.minor_id=0 and tbs.name=@TableName;
+
+declare @Result nvarchar(max) = '
+/// <summary>
+/// '+CAST(@TableDescription AS nvarchar(255))+'
+/// </summary>
+public class ' + @TableName + '
 {'
 
 select @Result = @Result + '
+    /// <summary>c
+    /// '+CAST(column_description AS nvarchar(255))+'
+    /// </summary>
     public ' + (CASE WHEN ColumnName = 'RowVersion' THEN 'byte[]' ELSE ColumnType END) + NullableSign + ' ' + ColumnName + ' { get; set; }
 '
 from
@@ -12,6 +25,7 @@ from
     select 
         replace(col.name, ' ', '_') ColumnName,
         column_id ColumnId,
+        ext.value as column_description,
         case typ.name 
             when 'bigint' then 'long'
             when 'binary' then 'byte[]'
@@ -52,6 +66,7 @@ from
     from sys.columns col
         join sys.types typ on
             col.system_type_id = typ.system_type_id AND col.user_type_id = typ.user_type_id
+            LEFT JOIN sys.extended_properties ext ON ext.major_id = col.object_id AND ext.minor_id = col.column_id
     where object_id = object_id(@TableName)
 ) t
 order by ColumnId
