@@ -1,7 +1,8 @@
 -- Creating C# model class from SQL query
 -- https://community.dynamics.com/365/b/livingintechnology/archive/2019/06/05/sql-script-to-generate-c-model
+-- https://www.cnblogs.com/qy1234/p/9044275.html
 
-declare @TableName sysname = 'User'
+declare @TableName sysname = 'TableName'
 
 -- table  MS_Description
 declare @TableDescription sql_variant

@@ -1,0 +1,35 @@
+## https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/
+
+## $ mkdir ./jobs
+## $ for i in apple banana cherry
+## do
+##   cat job-temp.yaml | sed "s/\$ITEM/$i/" > ./jobs/job-$i.yaml
+## done
+
+## $AREACODE $DATETYPE $DATE
+## cat job-temp.yaml | sed "s/\${AREACODE}/B175/" | sed "s/\${DATETYPE}/house/" | sed "s/\${DATE}/2019-06-12/" > ./job-1.yaml
+## kubectl apply -f job-1.yaml
+## kubectl delete jobs/keb175house2019-06-12
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ke${AREACODE}${DATETYPE}${DATE}
+spec:
+  template:
+    spec:
+      containers:
+      - name: ke${AREACODE}${DATETYPE}${DATE}
+        image: 'registry-vpc.cn-hangzhou.aliyuncs.com/sis6/hermitcrab:job'
+        env:
+          - name: TZ
+            value: Asia/Shanghai
+          - name: AREACODE_ENVIRONMENT
+            value: ${AREACODE}
+          - name: DATETYPE_ENVIRONMENT
+            value: ${DATETYPE}
+          - name: DATE_ENVIRONMENT
+            value: '${DATE}'
+          - name: APP_ENVIRONMENT
+            value: Production
+      restartPolicy: Never
