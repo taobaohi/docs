@@ -1,10 +1,10 @@
 
 ## 安装kubectl
 >
-(kubectl)[https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl],若下载失败，可以用代理在浏览器中下载，然后通过xftp上传到linux。
+[kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl],若下载失败，可以用代理在浏览器中下载，然后通过xftp上传到linux)
 
 ## job
- > (jobs)[https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/]
+ > [jobs)[https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion)
 
 ## 替换yaml变量
 ```shell
